@@ -1,68 +1,55 @@
-class HashTable:
-    def __init__(self):
-        self.size = 10
-        self.table = [None] * self.size
 
-    def hash_function(self, key):
-        return key % self.size
+# Hash Table using Division Method and Chaining
 
-    def insert(self, key):
-        index = self.hash_function(key)
+size = 10
+hash_table = [[] for i in range(size)]
 
-        for i in range(self.size):
-            pos = (index + i) % self.size
+# Insert operation
+def insert(key, value):
+    index = key % size
 
-            if self.table[pos] is None or self.table[pos] == "DELETED":
-                self.table[pos] = key
-                print("Key inserted.")
-                return
+    for pair in hash_table[index]:
+        if pair[0] == key:
+            pair[1] = value
+            print("Key updated successfully")
+            return
 
-            if self.table[pos] == key:
-                print("Key already exists.")
-                return
-
-        print("Hash table is full.")
-
-    def search(self, key):
-        index = self.hash_function(key)
-
-        for i in range(self.size):
-            pos = (index + i) % self.size
-
-            if self.table[pos] is None:
-                print("Key not found.")
-                return
-
-            if self.table[pos] == key:
-                print("Key found at index", pos)
-                return
-
-        print("Key not found.")
-
-    def delete(self, key):
-        index = self.hash_function(key)
-
-        for i in range(self.size):
-            pos = (index + i) % self.size
-
-            if self.table[pos] == key:
-                self.table[pos] = "DELETED"
-                print("Key deleted.")
-                return
-
-            if self.table[pos] is None:
-                print("Key not found.")
-                return
-
-        print("Key not found.")
-
-    def display(self):
-        for i in range(self.size):
-            print(i, ":", self.table[i])
+    hash_table[index].append([key, value])
+    print("Inserted successfully")
 
 
-h = HashTable()
+# Search operation
+def search(key):
+    index = key % size
 
+    for pair in hash_table[index]:
+        if pair[0] == key:
+            print("Value:", pair[1])
+            return
+
+    print("Key not found")
+
+
+# Delete operation
+def delete(key):
+    index = key % size
+
+    for pair in hash_table[index]:
+        if pair[0] == key:
+            hash_table[index].remove(pair)
+            print("Deleted successfully")
+            return
+
+    print("Key not found")
+
+
+# Display operation
+def display():
+    for i in range(size):
+        print(i, ":", hash_table[i])
+
+
+# Main program
 while True:
     print("\n1. Insert")
     print("2. Search")
@@ -70,25 +57,26 @@ while True:
     print("4. Display")
     print("5. Exit")
 
-    choice = int(input("Enter choice: "))
+    choice = int(input("Enter your choice: "))
 
     if choice == 1:
         key = int(input("Enter key: "))
-        h.insert(key)
+        value = input("Enter value: ")
+        insert(key, value)
 
     elif choice == 2:
         key = int(input("Enter key to search: "))
-        h.search(key)
+        search(key)
 
     elif choice == 3:
         key = int(input("Enter key to delete: "))
-        h.delete(key)
+        delete(key)
 
     elif choice == 4:
-        h.display()
+        display()
 
     elif choice == 5:
         break
 
     else:
-        print("Invalid choice.")
+        print("Invalid choice")
